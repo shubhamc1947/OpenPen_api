@@ -1,0 +1,97 @@
+schema for the database
+==================================================
+CREATE DATABASE IF NOT EXISTS blog;
+
+USE blog;
+
+CREATE TABLE IF NOT EXISTS users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    img VARCHAR(255) NOT NULL
+    
+);
+
+CREATE TABLE IF NOT EXISTS posts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    img VARCHAR(255) NOT NULL,
+    date DATETIME NOT NULL,
+    uid INT NOT NULL,
+    FOREIGN KEY (uid) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE
+);
+====================================================
+
+routes and index.js config
+
+routes/auth.js code here
+import express from 'express';
+const routes=express.Router();
+routes.get("/",(req,resp)=>{
+    resp.send("hello From auth")
+})
+
+export default routes;
+------------------------------------------------------
+index.js is here 
+
+import express from 'express';
+// import con from './db.js';
+import authRoutes from './routes/auth.js'
+const app=express();
+
+app.use(express.json())
+app.use("/auth/home",authRoutes)
+
+app.listen(8800,()=>{
+    console.log("Server is Running");
+})
+
+http://localhost:8800/auth/home will work on this url
+
+===========================================================
+
+controller -> routes-> index.js config
+----------------------------------------------
+
+contorllers=> auth.js
+
+// all crud ops here
+
+export const addPost=(res,resp)=>{
+    resp.json("from controller")
+}
+----------------------------------
+
+routes-> auth.js
+
+import express from 'express';
+import { addPost } from '../controllers/auth.js';
+const routes=express.Router();
+
+
+routes.get("/",addPost)
+
+export default routes;
+-------------------------------------
+
+index.js
+
+import express from 'express';
+// import con from './db.js';
+import authRoutes from './routes/auth.js'
+const app=express();
+
+app.use(express.json())
+app.use("/auth/home",authRoutes)
+
+
+
+app.listen(8800,()=>{
+    console.log("Server is Running");
+})
+
+http://localhost:8800/auth/home 
+works on this url

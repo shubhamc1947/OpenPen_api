@@ -1,0 +1,11 @@
+# Logs
+
+node_modules
+dist
+.env
+# Logs
+
+
+client/node_modules
+client/dist
+client/.env
